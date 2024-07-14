@@ -5,13 +5,18 @@ import { faEllipsisV, faUserCircle, faPaperPlane, faTrash } from '@fortawesome/f
 import fetchBotResponse from '../utils/fetchBotResponse';
 import typingEffect from '../utils/typingEffect';
 
+// ChatBody component responsible for rendering the chat interface
 const ChatBody = ({ bot }) => {
+  // State to store messages, user input, profile visibility, and menu visibility
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showProfile, setShowProfile] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
+  // Reference to the profile container for click outside detection
   const profileRef = useRef(null);
 
+  // Load messages from local storage when the bot changes
   useEffect(() => {
     if (bot) {
       const storedMessages = localStorage.getItem(bot.name);
@@ -19,6 +24,7 @@ const ChatBody = ({ bot }) => {
     }
   }, [bot]);
 
+  // Handle clicks outside the profile container to close the profile view
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -32,6 +38,7 @@ const ChatBody = ({ bot }) => {
     };
   }, [profileRef]);
 
+  // Handle sending a message
   const handleSendMessage = async () => {
     if (input.trim()) {
       const newMessages = [...messages, { type: 'user', text: input }];
@@ -39,7 +46,7 @@ const ChatBody = ({ bot }) => {
       setInput('');
       localStorage.setItem(bot.name, JSON.stringify(newMessages));
 
-      // Fetch response from the appropriate bot logic
+      // Fetch response from the bot
       try {
         const botResponse = await fetchBotResponse[bot.name.toLowerCase().replace(/ /g, '')](input);
         typingEffect(botResponse, (typedText) => {
@@ -55,25 +62,30 @@ const ChatBody = ({ bot }) => {
     }
   };
 
+  // Handle input change
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
+  // Handle Enter key press to send message
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSendMessage();
     }
   };
 
+  // Clear chat messages
   const clearChat = () => {
     setMessages([]);
     localStorage.removeItem(bot.name);
   };
 
+  // Toggle menu visibility
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
+  // Show profile view
   const viewProfile = () => {
     setShowProfile(true);
     setShowMenu(false);
@@ -83,6 +95,7 @@ const ChatBody = ({ bot }) => {
     <div className="flex-1 flex flex-col p-6 bg-gray-800 relative overflow-hidden">
       {bot ? (
         <>
+          {/* Header with bot icon and name, and menu toggle */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
               <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center">
@@ -104,6 +117,7 @@ const ChatBody = ({ bot }) => {
               )}
             </div>
           </div>
+          {/* Profile view */}
           {showProfile && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
               <div ref={profileRef} className="bg-gray-700 p-10 rounded-lg shadow-lg">
@@ -116,6 +130,7 @@ const ChatBody = ({ bot }) => {
               </div>
             </div>
           )}
+          {/* Chat messages */}
           <div className="flex-1 overflow-y-auto mb-4 space-y-4">
             {messages.map((message, index) => (
               <div key={index} className={`flex items-center ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -137,6 +152,7 @@ const ChatBody = ({ bot }) => {
               </div>
             ))}
           </div>
+          {/* Input and action buttons */}
           <div className="flex items-center">
             <input
               type="text"
@@ -155,6 +171,7 @@ const ChatBody = ({ bot }) => {
           </div>
         </>
       ) : (
+        // Prompt to select a bot if none is selected
         <div className="flex items-center justify-center h-full text-white">Select a bot to start chatting</div>
       )}
     </div>
