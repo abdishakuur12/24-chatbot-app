@@ -1,0 +1,69 @@
+/* src/index.css */
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.App {
+  display: flex;
+  height: 100vh;
+}
+
+.bg-blue-500:hover {
+  background-color: #1d4ed8;
+}
+
+.bg-red-500:hover {
+  background-color: #b91c1c;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: #1d4ed8;
+}
+
+.hover\:bg-red-700:hover {
+  background-color: #b91c1c;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Add more styles as needed */
